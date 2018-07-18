@@ -3,6 +3,7 @@ package cn.snowman.chat.controller;
 import cn.snowman.chat.entity.ResultEntity;
 import cn.snowman.chat.entity.User;
 import cn.snowman.chat.repository.UserRepository;
+import cn.snowman.chat.utils.RstUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,14 +18,7 @@ public class LoginController {
     @RequestMapping(value = "/login", method = {RequestMethod.POST, RequestMethod.GET})
     public ResultEntity login(String username, String password) {
         User user = userRepository.findByUsernameAndPassword(username, password);
-        ResultEntity rst = new ResultEntity();
-        if (user != null) {
-            rst.setSuccess(true);
-        } else {
-            rst.setSuccess(false);
-        }
-        rst.setBody(user);
-        return rst;
+        return RstUtil.setRst(user, 1);
     }
 
     @RequestMapping(value = "/register", method = {RequestMethod.GET, RequestMethod.POST})
@@ -33,6 +27,6 @@ public class LoginController {
         user.setUsername(username);
         user.setPassword(password);
         userRepository.save(user);
-        return new ResultEntity();
+        return RstUtil.setRst(new Object(), 1);
     }
 }
